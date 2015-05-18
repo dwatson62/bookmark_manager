@@ -1,4 +1,6 @@
 require 'data_mapper'
+require_relative 'link'
+require_relative 'tag'
 
 env = ENV['RACK_ENV'] || 'development'
 

@@ -11,4 +11,6 @@ class Link
   property :title,  String
   property :url,    String
 
+  has n, :tags, through: Resource
+
 end

@@ -1,4 +1,5 @@
 require 'sinatra/base'
+require_relative 'server'
 
 class BookmarkManager < Sinatra::Base
 
