@@ -16,6 +16,17 @@ DataMapper.finalize
 # However, the database tables don't exist yet. Let's tell datamapper to create them
 DataMapper.auto_upgrade!
 
+enable :sessions
+set :session_secret, 'super secret'
+
+  helpers do
+
+    def current_user
+      @current_user ||= User.get(session[:user_id]) if session[:user_id]
+    end
+
+  end
+
   get '/' do
     @links = Link.all
     erb :index
@@ -45,4 +56,11 @@ DataMapper.auto_upgrade!
     # ruby would divide the symbol :users by the
     # variable new (which makes no sense)
     erb :'users/new'
+  end
+
+  post '/users' do
+    user = User.create(email: params[:email],
+                password: params[:password])
+    session[:user_id] = user.id
+    redirect to('/')
   end

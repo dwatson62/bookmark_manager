@@ -1,9 +1,8 @@
 source 'https://rubygems.org'
 
+gem 'bcrypt-ruby'
 gem 'capybara'
 gem 'create_awesome_readme'
-gem 'cucumber'
-gem 'cucumber-sinatra'
 gem 'database_cleaner'
 gem 'data_mapper'
 gem 'dm-postgres-adapter'
