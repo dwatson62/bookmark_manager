@@ -1,3 +1,2 @@
 class BookmarkManager
-
 end
