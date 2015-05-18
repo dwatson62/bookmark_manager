@@ -13,6 +13,7 @@ class User
   # http://datamapper.org/docs/validations.html
 
   validates_confirmation_of :password
+  validates_uniqueness_of :email
 
   property :id, Serial
   property :email, String
@@ -22,6 +23,7 @@ class User
   # 50 characters by default
   # and it's not enough for the has and salt
   property :password_digest, Text
+  property :email, String, unique: true
 
   # when assigned the password, we don't store it directly
   # instead, we generate a password digest, that looks like this:
