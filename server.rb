@@ -8,6 +8,7 @@ DataMapper.setup(:default, "postgres://localhost/bookmark_manager_#{env}")
 
 require './lib/link' # this needs to be done after datamapper is initialised
 require './lib/tag'
+require './lib/user'
 
 # After declaring your models, you should finalise them
 DataMapper.finalize
@@ -36,4 +37,12 @@ DataMapper.auto_upgrade!
     tag = Tag.first(text: params[:text])
     @links = tag ? tag.links : []
     erb :index
+  end
+
+  get '/users/new' do
+    # note the view is in views/users/new.erb
+    # we need the quote because otherwise
+    # ruby would divide the symbol :users by the
+    # variable new (which makes no sense)
+    erb :'users/new'
   end
