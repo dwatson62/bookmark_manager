@@ -1,5 +1,6 @@
 require 'data_mapper'
 require 'sinatra'
+require 'rack-flash'
 
 env = ENV['RACK_ENV'] || 'development'
 
@@ -18,6 +19,7 @@ DataMapper.auto_upgrade!
 
 enable :sessions
 set :session_secret, 'super secret'
+use Rack::Flash
 
   helpers do
 
@@ -55,13 +57,27 @@ set :session_secret, 'super secret'
     # we need the quote because otherwise
     # ruby would divide the symbol :users by the
     # variable new (which makes no sense)
+    @user = User.new
     erb :'users/new'
   end
 
   post '/users' do
-    user = User.create(email: params[:email],
+    # we just initialize the object
+    # without saving it. It may be invalid
+    @user = User.create(email: params[:email],
                 password: params[:password],
                 password_confirmation: params[:password_confirmation])
-    session[:user_id] = user.id
-    redirect to('/')
+    # let's try saving it
+    # if the model is valid
+    # it will be saved
+    if @user.save
+      session[:user_id] = @user.id
+      redirect to ('/')
+      # if it's not valid,
+      # we'll show the same
+      # form again
+    else
+      flash[:notice] = 'Sorry, your passwords do not match'
+      erb :'users/new'
+    end
   end
