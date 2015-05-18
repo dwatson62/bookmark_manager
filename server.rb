@@ -77,7 +77,7 @@ use Rack::Flash
       # we'll show the same
       # form again
     else
-      flash[:notice] = 'Sorry, your passwords do not match'
+      flash.now[:errors] = @user.errors.full_messages
       erb :'users/new'
     end
   end
