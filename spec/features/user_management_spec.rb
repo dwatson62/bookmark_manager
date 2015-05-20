@@ -123,6 +123,8 @@ feature 'User resests password' do
     expect(page).not_to have_content('Welcome, test@test.com')
     sign_in('time_stamp_test@test.com', 'test1234')
     expect(page).to have_content('Welcome, time_stamp_test@test.com')
+    expect(user.password_token).to eq nil
+    expect(user.password_token_timestamp).to eq nil
   end
 
   scenario 'and submits a valid email with an expired token, and gets an error' do
@@ -131,8 +133,15 @@ feature 'User resests password' do
       user = User.first(password_token: 'TESTTOKEN')
       user.password_token_timestamp = time
       user.save
-    visit '/reset/TESTTOKEN'
+      visit '/reset/TESTTOKEN'
+      expect(page).to have_content('Expired link')
+  end
 
-    expect(page).to have_content('Expired link')
+  scenario 'and submits a valid email but with an incorrect token' do
+      user = User.first(password_token: 'TESTTOKEN')
+      user.password_token_timestamp = Time.now
+      user.save
+      visit '/reset/WRONGTOKEN'
+      expect(page).to have_content('Incorrect token')
   end
 end

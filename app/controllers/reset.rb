@@ -14,14 +14,18 @@ end
 get '/reset/:token' do
   @token = params[:token]
   @user = User.first(password_token: @token)
-  time_now = Time.new
-  time_now = time_now.strftime("%H")
-  time_stamp = @user.password_token_timestamp
-  time_stamp = time_stamp.strftime("%H")
-  if time_now.to_i - time_stamp.to_i >= 2
-    flash[:notice] = 'Expired link'
+  if @user
+    time_now = Time.new
+    time_now = time_now.strftime("%H")
+    time_stamp = @user.password_token_timestamp
+    time_stamp = time_stamp.strftime("%H")
+    if time_now.to_i - time_stamp.to_i >= 2
+      flash[:notice] = 'Expired link'
+    else
+      erb :reset_password
+    end
   else
-    erb :reset_password
+    flash[:notice] = 'Incorrect token'
   end
 end
 
@@ -30,6 +34,8 @@ post '/reset/done' do
   @user = User.first(password_token: @token)
   @user.password = params[:password]
   @user.password_confirmation = params[:password_confirmation]
+  @user.password_token = nil
+  @user.password_token_timestamp = nil
   @user.save
   flash[:notice] = 'Password updated'
   redirect to '/'
