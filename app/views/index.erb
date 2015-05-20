@@ -1,13 +1,40 @@
-<ul>
-  <% @links.each do |link| %>
-    <li><a href='<%= link.url %>'><%= link.title %></a></li>
-  <% end %>
-</ul>
-<div id='new-link'>
-  <form action='/links' method='post'>
-    Url: <input type='text' name='url'>
-    Title: <input type='text' name='title'>
-    Tags: <input type='text' name='tags'>
-    <input type='submit' value='Add link'>
-  </form>
+<div class='container-fluid'
+  <div class="row">
+    <div class="col-md-6"><h1>Bookmark Manager</h1></div>
+    <div class="col-md-6">
+      <a class="btn btn-default" href="/sessions/new" role="button">Sign in</a>
+    </div>
+  </div>
+</div>
+<div class='container-fluid'>
+  <div class="row">
+    <div class="col-md-6">
+      <ul>
+        <% @links.each do |link| %>
+          <li><a href='<%= link.url %>'><%= link.title %></a></li>
+        <% end %>
+      </ul>
+      <div id='new-link'>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+<div class='container-fluid'>
+  <div class="row">
+    <div class="col-md-4">
+      <form action='/links' method='post'>
+    </div>
+    <div class="col-md-4">
+      Url: <input type='text' name='url'>
+    </div>
+    <div class="col-md-4">
+      Title: <input type='text' name='title'>
+    </div>
+    <div class="col-md-4">
+      Tags: <input type='text' name='tags'>
+        <button type="button" class="btn btn-primary" name='Add link'>Add link</button>
+      </form>
+    </div>
+  </div>
 </div>

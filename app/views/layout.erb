@@ -3,7 +3,7 @@
 
 <head>
 <title>Bookmark Manager by @dwatson62</title>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://bootswatch.com/slate/bootstrap.min.css">
 <link rel="stylesheet" href="/css/custom.css">
 
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -37,7 +37,7 @@
     Welcome, <%= current_user.email %>
     <form method='post' action='/sessions'>
       <input type='hidden' name='_method' value='delete'>
-      <input type='submit' value='Sign out'>
+      <button type="button" class="btn btn-primary">Sign out</button>
     </form>
   <% end %>
 
