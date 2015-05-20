@@ -1,3 +1,5 @@
+require 'byebug'
+
 require 'spec_helper'
 require_relative 'helpers/session'
 include SessionHelpers
@@ -99,9 +101,38 @@ feature 'User forgets password' do
     expect(page).to have_content('Invalid email')
   end
 
-  xscenario 'and submits a valid email with an expired token, and gets an error' do
+end
 
-    visit '/reset/:token'
+feature 'User resests password' do
+
+    before(:each) do
+      time_stamp_user = User.create(email: 'time_stamp_test@test.com', password: 'test', password_confirmation: 'test',password_token: 'TESTTOKEN', password_token_timestamp: nil)
+      end
+
+  scenario 'and submits valid email, and resets their password' do
+    user = User.first(password_token: 'TESTTOKEN')
+    user.password_token_timestamp = Time.now
+    user.save
+    visit '/reset/TESTTOKEN'
+    expect(page).to have_content('Enter your new password')
+    fill_in 'password', with: 'test1234'
+    fill_in 'password_confirmation', with: 'test1234'
+    click_button 'Save password'
+    expect(page).to have_content('Password updated')
+    visit '/'
+    expect(page).not_to have_content('Welcome, test@test.com')
+    sign_in('time_stamp_test@test.com', 'test1234')
+    expect(page).to have_content('Welcome, time_stamp_test@test.com')
+  end
+
+  scenario 'and submits a valid email with an expired token, and gets an error' do
+      time = Time.now
+      time = time - (60 * 120)
+      user = User.first(password_token: 'TESTTOKEN')
+      user.password_token_timestamp = time
+      user.save
+    visit '/reset/TESTTOKEN'
+
     expect(page).to have_content('Expired link')
   end
 end
