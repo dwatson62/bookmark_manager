@@ -1,4 +1,5 @@
 require 'bcrypt'
+require 'securerandom'
 
 class User
 
@@ -16,6 +17,8 @@ class User
 
   property :id, Serial
   property :email, String
+  property :password_token, String
+  property :password_token_timestamp, DateTime
 
   # This will store both the password and the salt
   # It's Text and not String becasue String holds

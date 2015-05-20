@@ -74,3 +74,34 @@ feature 'User signs out' do
   end
 
 end
+
+feature 'User forgets password' do
+
+  before(:each) do
+    User.create(email: 'test@test.com',
+                password: 'test',
+                password_confirmation: 'test')
+  end
+
+  scenario 'and submits a valid email, and gets a token' do
+    visit '/sessions/new'
+    expect(page).to have_content('Forgot password')
+    fill_in 'forgot_email', with: 'test@test.com'
+    click_button 'Forgot password'
+    expect(page).to have_content('Please check your email')
+  end
+
+  scenario 'and submits an invalid email, and gets an error' do
+    visit '/sessions/new'
+    expect(page).to have_content('Forgot password')
+    fill_in 'forgot_email', with: 'invalid@test.com'
+    click_button 'Forgot password'
+    expect(page).to have_content('Invalid email')
+  end
+
+  xscenario 'and submits a valid email with an expired token, and gets an error' do
+
+    visit '/reset/:token'
+    expect(page).to have_content('Expired link')
+  end
+end
