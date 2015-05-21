@@ -5,6 +5,7 @@ post '/reset' do
     user.password_token = (1..10).map{('A'..'Z').to_a.sample}.join
     user.password_token_timestamp = Time.now
     user.save
+    user.send_simple_message
     flash[:notice] = 'Please check your email'
   else
     flash[:notice] = 'Invalid email'

@@ -2,6 +2,8 @@ require 'data_mapper'
 require 'sinatra'
 require 'sinatra/partial'
 require 'rack-flash'
+require 'RestClient'
+
 require_relative 'models/link'
 require_relative 'models/tag'
 require_relative 'models/user'

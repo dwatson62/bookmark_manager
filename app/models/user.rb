@@ -59,4 +59,25 @@ class User
     end
   end
 
+  def send_message
+    API_KEY = ENV['MAILGUN_API_KEY']
+    API_URL = "https://api:#{API_KEY}@api.mailgun.net/v3/sandbox5a3d27d8d56d4146a5079a331b81bb2d.mailgun.org/messages"
+      RestClient::Request.execute(
+        url: api_url + '/messages',
+        method: :post,
+        payload: {
+          from: 'mailgun@sandbox5a3d27d8d56d4146a5079a331b81bb2d.mailgun.org',
+          to: 'darylwtsn@gmail.com',
+          subject: 'This is subject',
+          text: 'This is text',
+          html: 'https:///secret-eyrie-7141.herokuapp.com/reset/' + self.password_token,
+          multipart: true
+        },
+        headers: {
+          "h:X-My-Header": 'www/mailgun-email-send'
+        },
+        verify_ssl: false
+      )
+  end
+
 end
